@@ -1,2 +1,8 @@
 require('dotenv').config()
-require("./src/web/app")
+const Engine = require("./src/web/Engine");
+
+const engine = new Engine();
+
+engine.loadBlocks().then(()=> require("./src/web/app"))
+
+module.exports = {engine}

@@ -1,50 +1,41 @@
-class Header {
-  name = "Header"
-  description = "Add header"
-  options = {
-    size: {
-      type: Number,
-      values: [1, 2, 3, 4, 5, 6],
-      default: 1,
-    },
-    text: {
-      type: String,
-      default: "Header Text",
-    },
-  }
+const BlockHandler = require("../utils/BlockHandler")
 
-
-  size = this.options.size.default
-  text = this.options.text.default
-
-  /**
-   * @param {Number} number
-   * @type {boolean}
-   * */
-  setSize(number) {
-    if (!this.options.size.values.includes(number))
-      return false;
-    this.size = number;
-    return true;
-  }
-
-  /**
-   * @param {String} text
-   * @type {boolean}
-   * */
-  setText(text) {
-    if (typeof text !== "string")
-      return false;
-    this.text = text;
-    return true;
-  }
-
-  render() {
-    return `<div class="header-block"><h${this.size}>${this.text}</h${this.size}></div>`;
-  }
-
-  renderAdminUI() {
-    return `
+class Header extends BlockHandler{
+  constructor() {
+    super();
+    this.name = "Header"
+    this.description = "Add header"
+    this.options = {
+      size: {
+        type: Number,
+        values: [1, 2, 3, 4, 5, 6],
+        default: 1,
+      },
+      text: {
+        type: String,
+        default: "Header Text",
+      },
+    }
+    this.id = Date.now();
+    this.size = this.options.size.default;
+    this.text = this.options.text.default;
+    this.setSize = function(number) {
+      if (!this.options.size.values.includes(number))
+        return false;
+      this.size = number;
+      return true;
+    }
+    this.setText = function(text) {
+      if (typeof text !== "string")
+        return false;
+      this.text = text;
+      return true;
+    }
+    this.render = function () {
+      return `<div class="header-block"><h${this.size}>${this.text}</h${this.size}></div>`;
+    }
+    this.renderAdminUI = function() {
+      return `
       <h1>Header Block Settings</h1>
       <form id="header-settings-form">
         <label for="size-input">Size:</label>
@@ -58,7 +49,9 @@ class Header {
         <button type="button" id="update-settings-btn">Update Settings</button>
       </form>
     `;
+    }
   }
+
 }
 
 module.exports = Header;

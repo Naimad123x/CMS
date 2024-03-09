@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <title><%= siteName %></title>
+    <link rel="stylesheet" href="/builder/style.css">
+</head>
+<body>
+<div id="left-sidebar">
+    <h2>Available Blocks</h2>
+    <ul>
+        <% blocks.forEach((block) => { %>
+            <li class="draggable" data-type="<%= block.type %>" draggable="true"><%= block.type %></li>
+        <% }); %>
+    </ul>
+</div>
+
+<div id="main-content">
+    <h1><%= siteName %> - Builder</h1>
+    <div id="drop-area" class="droppable">
+        <!-- Drag and drop area -->
+    </div>
+</div>
+
+<div id="right-sidebar">
+    <h2>Settings</h2>
+    <div id="settings-panel">
+        <!-- Block settings will be loaded here -->
+    </div>
+</div>
+<script src="/builder/script.js"></script>
+</body>
+</html>
