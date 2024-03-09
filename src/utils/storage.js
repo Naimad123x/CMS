@@ -24,16 +24,55 @@ module.exports = {
     })
   },
 
-
-  findApiKey: async function(key) {
+  getSettings: async function() {
     return await new Promise(async function (resolve, reject) {
-      pool.query("SELECT * FROM `api_keys` WHERE `key` = ?",
-        [key],
+      pool.query("SELECT * FROM `settings`",
+        function (err, rows) {
+          if (err)
+            return reject(err);
+          if(rows.length > 0)
+            return resolve(JSON.parse(rows[0].data));
+          else
+            return resolve({});
+        });
+    })
+  },
+
+
+  saveNewBlocks: async function(blocks) {
+    return await new Promise(async function (resolve, reject) {
+      pool.query("INSERT INTO `blocks` (`data`,`date`) VALUES (?,?)",
+        [blocks, Date.now()],
         function (err, rows) {
           if (err)
             return reject(err);
           return resolve(rows);
         });
+    })
+  },
+
+  saveSettings: async function(settings) {
+    return await new Promise(async function (resolve, reject) {
+      pool.query("SELECT * FROM `settings`",
+        function(err,rows){
+          if(!rows || rows.length < 1){
+            pool.query("INSERT INTO `settings` (`data`) VALUES (?)",
+              [settings],
+              function (err, rows) {
+                if (err)
+                  return reject(err);
+                return resolve(rows);
+              });
+          }else{
+            pool.query("UPDATE `settings` SET `data` = ?",
+              [settings],
+              function (err, rows) {
+                if (err)
+                  return reject(err);
+                return resolve(rows);
+              });
+          }
+      })
     })
   },
 

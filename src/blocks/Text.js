@@ -11,7 +11,6 @@ class Text extends BlockHandler{
         default: "Text",
       },
     }
-    this.id = Date.now();
     this.text = this.options.text.default;
     this.setText = function(text) {
       if (typeof text !== "string")

@@ -31,11 +31,34 @@ function checkDatabase(){
         (err)=>{
           if(err)
             throw err;
-          console.log(`Database checked!`)
+          console.log(`Database admins created!`)
         }
       )
     }
   })
+  pool.query("SELECT * FROM `blocks`", (err) =>{
+    if(err){
+      pool.query("create table `blocks` (`id` int auto_increment,`data` longtext null,`date` text null,constraint api_keys_pk primary key (id))",
+        (err)=>{
+          if(err)
+            throw err;
+          console.log(`Database blocks created!`)
+        }
+      )
+    }
+  })
+  pool.query("SELECT * FROM `settings`", (err) =>{
+    if(err){
+      pool.query("create table `settings` (`id` int auto_increment,`data` longtext null,constraint api_keys_pk primary key (id))",
+        (err)=>{
+          if(err)
+            throw err;
+          console.log(`Database settings created!`)
+        }
+      )
+    }
+  })
+  console.log(`Database checked!`)
 }
 
 module.exports = pool;

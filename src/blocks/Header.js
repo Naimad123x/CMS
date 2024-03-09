@@ -3,8 +3,11 @@ const BlockHandler = require("../utils/BlockHandler")
 class Header extends BlockHandler{
   constructor() {
     super();
+
     this.name = "Header"
+
     this.description = "Add header"
+
     this.options = {
       size: {
         type: Number,
@@ -16,24 +19,15 @@ class Header extends BlockHandler{
         default: "Header Text",
       },
     }
-    this.id = Date.now();
+
     this.size = this.options.size.default;
+
     this.text = this.options.text.default;
-    this.setSize = function(number) {
-      if (!this.options.size.values.includes(number))
-        return false;
-      this.size = number;
-      return true;
-    }
-    this.setText = function(text) {
-      if (typeof text !== "string")
-        return false;
-      this.text = text;
-      return true;
-    }
+
     this.render = function () {
       return `<div class="header-block"><h${this.size}>${this.text}</h${this.size}></div>`;
     }
+
     this.renderAdminUI = function() {
       return `
       <h1>Header Block Settings</h1>
@@ -50,8 +44,22 @@ class Header extends BlockHandler{
       </form>
     `;
     }
-  }
 
+    this.setSize = function(number) {
+      if (!this.options.size.values.includes(number))
+        return false;
+      this.size = number;
+      return true;
+    }
+
+    this.setText = function(text) {
+      if (typeof text !== "string")
+        return false;
+      this.text = text;
+      return true;
+    }
+
+  }
 }
 
 module.exports = Header;

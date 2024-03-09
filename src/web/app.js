@@ -1,6 +1,5 @@
 const express = require('express');
-// const morgan = require("morgan");
-const logger = require("../utils/logger");
+const morgan = require("morgan");
 const {join} = require("path");
 const bodyParser = require('body-parser');
 const app = express();
@@ -11,6 +10,7 @@ const admin = require("./routers/admin/admin")
 // const {engine} = require("../../index");
 
 app
+  .use(morgan("dev"))
   .disable('x-powered-by')
   .use(bodyParser.urlencoded({ extended: true }))
   .use(bodyParser.json())
@@ -18,7 +18,6 @@ app
   .set('views', join(__dirname, '/views'))
   .use(express.static(join(__dirname, '/public')))
   .use(limiter)
-  // .use(morgan("tiny"))
 
   .use("/", router)
   .use("/admin", admin)
@@ -27,15 +26,5 @@ app
   .listen(port, () => {
     console.log(`server listening on port ${port}`);
   });
-
-app.use((req, res, next) => {
-  logger.info({
-    method: req.method,
-    url: req.url,
-    statusCode: res.statusCode,
-    responseTime: Date.now() - req.startTime,
-  });
-  next();
-});
 
 module.exports = {app};

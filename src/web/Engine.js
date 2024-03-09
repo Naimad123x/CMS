@@ -8,16 +8,19 @@ class Engine {
   blocks = [];
   admins = [];
   placedBlocks = [];
+  settings = {};
 
   constructor(
     siteName = "NodePress Site",
   ) {
-    this.siteName = siteName;
+    this.siteName = siteName
+    this.loadSettings().then(()=>{})
 
     // Load Admin users
-    this.loadAdmins();
+    this.loadAdmins().then(()=>{});
   }
 
+  // Load all block files
   async loadBlocks() {
     return new Promise((resolve, reject) => {
       try {
@@ -28,10 +31,7 @@ class Engine {
           try {
             const BlockClassModule = require(path.join(__dirname, `../blocks/${file}`));
 
-            // Make sure to get the default export if it's an ES6 module
-            const BlockClass = BlockClassModule.default || BlockClassModule;
-
-            return BlockClass; // Create an instance of the block class
+            return BlockClassModule.default || BlockClassModule; // Create an instance of the block class
           } catch (e) {
             console.error(`Block ${file}:`, e);
             return null;
@@ -41,7 +41,6 @@ class Engine {
         // Filter out any failed instantiations
         this.blocks = this.blocks.filter(block => block !== null);
 
-        // console.log(this.blocks);
         resolve(this.blocks);
       } catch (error) {
         console.error("Error loading blocks:", error);
@@ -50,11 +49,13 @@ class Engine {
     });
   }
 
+  // Add placed block to array
   addBlock(block) {
     this.placedBlocks.push(block);
   }
 
-  loadAdmins(){
+  // Fetch admins from database
+  async loadAdmins(){
 
     const admins = new Promise((resolve, reject) => {
       resolve(storage.getAdmins());
@@ -63,6 +64,25 @@ class Engine {
     admins.then(admins => this.admins = admins)
   }
 
+  // Fetching settings from database
+  async loadSettings(){
+
+    const settings = new Promise((resolve, reject) => {
+      resolve(storage.getSettings());
+    });
+
+    settings.then(settings => {
+      this.settings = settings
+      this.reloadSettings();
+    })
+  }
+
+  // Change values of Engine
+  reloadSettings(){
+    this.siteName = this.settings.siteName;
+  }
+
+  // Fetch all blocks serialized data
   async getBlocksData() {
     return new Promise((resolve, reject) => {
       const serialized = this.blocks.map((block) => {

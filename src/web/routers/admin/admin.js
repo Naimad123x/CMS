@@ -1,20 +1,17 @@
 const express = require("express");
 const admin = express.Router();
 const {engine} = require("../../../../index")
+const builder = require("./sub/builder");
+const {settings, settingsSave} = require("./sub/settings");
 
 admin.get(`/`, (req, res) =>{
   return res.render(`main`)
 })
 
-admin.get(`/builder`, async (req, res) => {
-  // console.log("admin.js", await engine.getBlocksData())
-  return res.render(
-    `sites/builder/index`,
-    {
-      siteName: engine.siteName,
-      blocks: await engine.getBlocksData(),
-    })
-})
+admin.get(`/builder`, builder)
+
+admin.get(`/settings`, settings)
+admin.post(`/settings/save`, settingsSave)
 
 admin.get('/blocks-data', (req, res) => {
   res.json({ blocks: engine.blocks });
