@@ -79,7 +79,7 @@ class Engine {
 
   // Change values of Engine
   reloadSettings(){
-    this.siteName = this.settings.siteName;
+    this.siteName = this.settings.siteName ? this.settings.siteName : "NodePress Site";
   }
 
   // Fetch all blocks serialized data

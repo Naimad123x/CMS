@@ -8,6 +8,7 @@ const port = process.env.PORT;
 const router = require("./routers/main/main")
 const admin = require("./routers/admin/admin")
 // const {engine} = require("../../index");
+require("../utils/conn");
 
 app
   .use(morgan("dev"))

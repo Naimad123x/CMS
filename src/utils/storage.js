@@ -1,6 +1,7 @@
 const pool = require("./conn.js");
 
 module.exports = {
+
   getAdmins: async function() {
     return await new Promise(async function (resolve, reject) {
       pool.query("SELECT * FROM `admins`",
