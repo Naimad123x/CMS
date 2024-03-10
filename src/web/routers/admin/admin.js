@@ -22,7 +22,7 @@ admin.get('/block-data/:blockType', async (req, res) => {
   const block = await engine.blocks.find(a => a.name === req.params.blockType);
 
   const newBlock = new block();
-  engine.addBlock(newBlock)
+  // engine.addBlock(newBlock)
   const serialized = newBlock.serialize();
   return res.json(serialized);
 });

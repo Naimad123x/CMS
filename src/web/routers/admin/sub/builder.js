@@ -1,5 +1,5 @@
 const {engine} = require("../../../../../index");
-const {saveSettings, saveNewBlocks} = require("../../../../utils/storage");
+const {saveNewBlocks} = require("../../../../utils/storage");
 
 const builder = async function(req, res) {
   // console.log("admin.js", await engine.getBlocksData())
