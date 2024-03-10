@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 (async () => {
+  const transporter = require("./src/utils/transporter");
   require("./src/utils/conn");
   await delay(5000);
   const Engine = require("./src/web/Engine");
@@ -10,7 +11,7 @@ require('dotenv').config();
 
     require("./src/web/app");
   })
-  module.exports = {engine}
+  module.exports = {engine, transporter}
 })();
 
 

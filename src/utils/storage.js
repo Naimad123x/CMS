@@ -1,4 +1,5 @@
 const pool = require("./conn.js");
+const bcrypt = require('bcrypt');
 
 module.exports = {
 
@@ -97,6 +98,31 @@ module.exports = {
           }
       })
     })
+  },
+
+  createUser: async function(user) {
+    const { email, username, password, name } = user;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    return await new Promise(async function (resolve, reject) {
+      pool.query('INSERT INTO `admins` (`email`, `username`, `password`, `name`) VALUES (?, ?, ?, ?)',
+        [email, username, hashedPassword, name],
+        function (err, rows) {
+          if (err)
+            return reject(err);
+          return resolve(rows);
+        });
+    })
+  },
+
+  validateLogin: async function(username, password) {
+    const [rows, fields] = await pool.execute('SELECT * FROM `admins` WHERE `username` = ?', [username]);
+
+    if (rows.length === 0) {
+      return false;
+    }
+
+    const user = rows[0];
+    return await bcrypt.compare(password, user.password);
   },
 
 
