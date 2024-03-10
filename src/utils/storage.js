@@ -39,30 +39,39 @@ module.exports = {
     })
   },
 
+  getNewestBuildBlocks: async function() {
+    return await new Promise(async function (resolve, reject) {
+      pool.query("SELECT * FROM `blocks` ORDER BY `date` DESC LIMIT 1",
+        function(err,rows){
+          // console.log(JSON.parse(rows[0].data))
+          resolve(rows[0]?.data ? JSON.parse(rows[0].data) : {})
+        })
+    })
+  },
 
   saveNewBlocks: async function(blocks) {
     return await new Promise(async function (resolve, reject) {
-      pool.query("SELECT * FROM `blocks`",
-        function(err,rows){
-          if(!rows || rows.length < 1){
-            pool.query("INSERT INTO `settings` (`data`,`date`) VALUES (?,?)",
-              [blocks],
-              function (err, rows) {
-                if (err)
-                  return reject(err);
-                return resolve(rows);
-              });
-          }else{
-            pool.query("UPDATE `blocks` SET `data` = ? `date` = ?",
+    //   pool.query("SELECT * FROM `blocks`",
+    //     function(err,rows){
+          // if(!rows || rows.length < 1){
+            pool.query("INSERT INTO `blocks` (`data`,`date`) VALUES (?,?)",
               [blocks, Date.now()],
               function (err, rows) {
                 if (err)
                   return reject(err);
                 return resolve(rows);
               });
-          }
+          // }else{
+          //   pool.query("UPDATE `blocks` SET `data` = ?, `date` = ?",
+          //     [blocks, Date.now()],
+          //     function (err, rows) {
+          //       if (err)
+          //         return reject(err);
+          //       return resolve(rows);
+          //     });
+          // }
         })
-    })
+    // })
   },
 
   saveSettings: async function(settings) {

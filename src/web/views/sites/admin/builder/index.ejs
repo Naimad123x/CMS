@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <title><%= siteName %></title>
+    <link rel="stylesheet" href="/builder/style.css">
+</head>
+<body>
+<div id="left-sidebar">
+    <h2>Available Blocks</h2>
+    <ul>
+        <% blocks.forEach((block) => { %>
+            <li class="draggable" data-type="<%= block.type %>" draggable="true"><%= block.type %></li>
+        <% }); %>
+    </ul>
+</div>
+
+<div id="main-content">
+    <h1><%= siteName %> - Builder</h1>
+    <div id="drop-area" class="droppable">
+        <!-- Drag and drop area -->
+    </div>
+</div>
+
+<div id="right-sidebar">
+    <h2>Settings</h2>
+    <div id="settings-panel">
+        <button id="saveBlocks">SAVE CHANGES</button>
+        <!-- Block settings will be loaded here -->
+    </div>
+</div>
+<script src="/builder/script.js"></script>
+<script>
+    const btn = document.querySelector("#saveBlocks");
+
+    btn.addEventListener("click", () => {
+      const settingsPanel = document.querySelector("#settings-panel");
+      const settingsBlocks = document.querySelectorAll("#settings-block")
+
+      let newBlocks = [];
+      for (const child of settingsPanel.children) {
+        const settingsValues = {
+          id: child.dataset.blockid,
+          type: child.dataset.blocktype,
+          options: {}
+        };
+        child.querySelectorAll("[id$='-input']").forEach(element => {
+
+          const settingName = element.id.slice(0, -6);
+
+          settingsValues.options[settingName] = element.value;
+        })
+        newBlocks.push(settingsValues)
+      }
+      newBlocks.shift();
+      return sendSettingsValues(newBlocks.filter(a => a !== null && a.options !== null));
+    })
+
+    function sendSettingsValues(newBlocks){
+
+      fetch('/admin/builder/save', {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify(newBlocks)
+      })
+        .then(response => {
+          return response.json();
+        })
+        .then(text => {
+          console.log(text)
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    }
+
+</script>
+</body>
+</html>

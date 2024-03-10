@@ -39,8 +39,6 @@ class Header extends BlockHandler{
         <br>
         <label for="text-input">Text:</label>
         <input type="text" id="text-input" placeholder="${this.options.text.default}">
-        <br>
-        <button type="button" id="update-settings-btn">Update Settings</button>
       </form>
     `;
     }

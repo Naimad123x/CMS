@@ -24,10 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(blockData => {
         // Render block in the drop area
+        const settingsArea = document.querySelector("#settings-panel")
         dropArea.innerHTML += `<div id="dropped-block" data-blockId="${blockData.id}">${blockData.render}</div>`;
 
+        const template = document.createElement('template');
+        template.innerHTML = `<div id="settings-block" data-blockId="${blockData.id}" data-blockType="${blockData.type}">${blockData.renderAdminUI}</div>`;
         // Render block settings in the right sidebar
-        settingsPanel.innerHTML += blockData.renderAdminUI;
+        const newSettingsBlock = template.content.cloneNode(true);  // Deep clone to include any nested elements
+        settingsArea.appendChild(newSettingsBlock);
       })
       .catch(error => console.error('Error fetching block data:', error));
   });
