@@ -18,7 +18,7 @@ class Engine {
     this.siteName = siteName
     this.loadSettings().then(()=>{})
 
-    this.loadBlocksSettings().then(()=>{console.log(this.placedBlocks)})
+    this.loadBlocksSettings().then(()=>{})
     // Load Admin users
     this.loadAdmins().then(()=>{});
   }
@@ -81,6 +81,7 @@ class Engine {
   }
 
   async loadBlocksSettings(){
+    this.placedBlocks = [];
     getNewestBuildBlocks().then((blocksRaw) =>{
       blocksRaw.forEach(async (block) =>{
         const Block = await this.blocks.find(a => a.name === block.type);
@@ -93,6 +94,7 @@ class Engine {
           newBlock[a] = block.options[a]
           // console.log(2, newBlock[a])
         }
+        // console.log(newBlock)
         this.placedBlocks.push(newBlock)
       })
     })

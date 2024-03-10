@@ -16,11 +16,11 @@ const builderSave = async function(req, res) {
     if(!req.body)
       return res.json({error: true, message: "No body!"})
     const {body} = req;
-    await saveNewBlocks(JSON.stringify(body)).then((result)=>{
+    await saveNewBlocks(JSON.stringify(body)).then(async (result) => {
       // console.log(result)
-      return res.json({message:"New look saved"})
+      await engine.loadBlocksSettings()
+      return res.json({message: "New look saved"})
     })
-
   }catch(e){
 
     console.log(e)
