@@ -42,13 +42,26 @@ module.exports = {
 
   saveNewBlocks: async function(blocks) {
     return await new Promise(async function (resolve, reject) {
-      pool.query("INSERT INTO `blocks` (`data`,`date`) VALUES (?,?)",
-        [blocks, Date.now()],
-        function (err, rows) {
-          if (err)
-            return reject(err);
-          return resolve(rows);
-        });
+      pool.query("SELECT * FROM `blocks`",
+        function(err,rows){
+          if(!rows || rows.length < 1){
+            pool.query("INSERT INTO `settings` (`data`,`date`) VALUES (?,?)",
+              [blocks],
+              function (err, rows) {
+                if (err)
+                  return reject(err);
+                return resolve(rows);
+              });
+          }else{
+            pool.query("UPDATE `blocks` SET `data` = ? `date` = ?",
+              [blocks, Date.now()],
+              function (err, rows) {
+                if (err)
+                  return reject(err);
+                return resolve(rows);
+              });
+          }
+        })
     })
   },
 
