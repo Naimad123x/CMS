@@ -1,6 +1,8 @@
 const storage = require("../utils/storage");
 const fs = require("fs");
 const path = require("path");
+const {getNewestBuildBlocks} = require("../utils/storage");
+const {engine} = require("../../index");
 
 class Engine {
 
@@ -16,6 +18,7 @@ class Engine {
     this.siteName = siteName
     this.loadSettings().then(()=>{})
 
+    this.loadBlocksSettings().then(()=>{console.log(this.placedBlocks)})
     // Load Admin users
     this.loadAdmins().then(()=>{});
   }
@@ -74,6 +77,24 @@ class Engine {
     settings.then(settings => {
       this.settings = settings
       this.reloadSettings();
+    })
+  }
+
+  async loadBlocksSettings(){
+    getNewestBuildBlocks().then((blocksRaw) =>{
+      blocksRaw.forEach(async (block) =>{
+        const Block = await this.blocks.find(a => a.name === block.type);
+
+        const newBlock = new Block();
+        // console.log(newBlock)
+        // console.log(block.options)
+        for(let a in block.options) {
+          // console.log(1, newBlock[a])
+          newBlock[a] = block.options[a]
+          // console.log(2, newBlock[a])
+        }
+        this.placedBlocks.push(newBlock)
+      })
     })
   }
 

@@ -1,7 +1,7 @@
 const express = require("express");
 const admin = express.Router();
 const {engine} = require("../../../../index")
-const builder = require("./sub/builder");
+const {builder, builderSave} = require("./sub/builder");
 const {settings, settingsSave} = require("./sub/settings");
 
 admin.get(`/`, (req, res) =>{
@@ -9,6 +9,7 @@ admin.get(`/`, (req, res) =>{
 })
 
 admin.get(`/builder`, builder)
+admin.post(`/builder/save`, builderSave)
 
 admin.get(`/settings`, settings)
 admin.post(`/settings/save`, settingsSave)

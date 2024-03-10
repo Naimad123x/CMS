@@ -4,7 +4,7 @@ const {saveSettings} = require("../../../../utils/storage");
 const settings = async function(req, res) {
   // console.log("admin.js", await engine.getBlocksData())
   return res.render(
-    `sites/settings/index`,
+    `sites/admin/settings/index`,
     {
       siteName: engine.siteName,
     })
@@ -19,7 +19,7 @@ const settingsSave = async function(req, res) {
       // console.log(result)
       return res.json({message:"Settings saved"})
     })
-
+    await engine.loadSettings();
   }catch(e){
 
     console.log(e)
