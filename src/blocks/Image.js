@@ -35,7 +35,7 @@ class Image extends BlockHandler{
         <input type="text" id="image-lenght" placeholder="600"><br/>
         <br>
       </form>
-    `;
+    ` ;
         }
     }
 
