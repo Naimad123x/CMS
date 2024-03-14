@@ -15,12 +15,19 @@ class Engine {
   constructor(
     siteName = "NodePress Site",
   ) {
+    this.hashes = [];
     this.siteName = siteName
     this.loadSettings().then(()=>{})
 
     this.loadBlocksSettings().then(()=>{})
-    // Load Admin users
+    // Load AdminUser users
     this.loadAdmins().then(()=>{});
+
+    this.addHash = function(client, hash){
+      let obj = {client: client, hash: hash, date: Date.now()}
+      this.hashes.push(obj)
+      return obj;
+    }
   }
 
   // Load all block files

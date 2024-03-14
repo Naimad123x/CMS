@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+    <title><%= siteName %> - Login</title>
+    <link rel="stylesheet" href="/main/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div class="container text-center">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-3">
+            <h1>Login</h1>
+            <form class="needs-validation">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button id="submitCredentials" type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
+<script>
+    let clientId = generateUUID();
+    const btn = document.getElementById("submitCredentials");
+    btn.addEventListener("click", (e)=>{
+      e.preventDefault();
+
+      const data = {
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+      }
+
+      fetch("http://localhost:3000/api/v1/getHashToken",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({client: clientId})
+        }
+      ).then(raw => {return raw.json();})
+        .then((hashData)=>{
+          console.log(hashData)
+            data.password = CryptoJS.AES.encrypt(data.password, hashData.hash).toString()
+            data.client = hashData.client
+          console.log(data)
+            fetch(window.location.href,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+              }
+            ).then(data => {window.location.reload()})
+
+      })
+    })
+
+    function generateUUID() {
+      let d = new Date().getTime();
+      let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16;
+        if(d > 0){
+          r = (d + r)%16 | 0;
+          d = Math.floor(d/16);
+        } else {
+          r = (d2 + r)%16 | 0;
+          d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
+</script>
+</body>
+</html>

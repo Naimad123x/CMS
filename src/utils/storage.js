@@ -15,13 +15,28 @@ module.exports = {
               {
                 email: row.email,
                 username: row.username,
-                password: row.password,
                 name: row.name,
                 verified: row.verified
               }
             )
           })
           return resolve(admins);
+        });
+    })
+  },
+
+  getPassword: async function(username){
+    return await new Promise(async function (resolve, reject) {
+      pool.query("SELECT * FROM `admins` WHERE `username` = ?",
+        [username],
+        function (err, rows) {
+          if (err)
+            return reject(err);
+
+          if(rows.length < 1)
+            return reject({message: "User not found!"});
+
+          return resolve(rows[0].password);
         });
     })
   },
