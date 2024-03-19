@@ -1,11 +1,17 @@
 const {engine} = require("../../../../../index");
 const {getPassword} = require("../../../../utils/storage");
-const {comparePassword} = require("../../../../utils/crypto");
 const CryptoJS = require("crypto-js");
 const bcrypt = require("bcrypt");
 
 const loginPage = async function(req, res) {
-  // console.log("admin.js", await engine.getBlocksData())
+  await engine.loadAdmins();
+  if(engine.admins.length < 1){
+    return res.render(
+      `sites/admin/auth/firstlogin`,
+      {
+        siteName: engine.siteName,
+      })
+  }
   return res.render(
     `sites/admin/auth/login`,
     {
@@ -24,28 +30,28 @@ const authenticate = async function(req, res){
         });
 
     } else {
-      console.log(2)
+      // console.log(2)
       const usrDbPass = await getPassword(req.body.username);
       let hashFind = await engine.hashes.find(a => a.client === req.body.client);
-      console.log(hashFind)
+      // console.log(hashFind)
       let bytes = CryptoJS.AES.decrypt(req.body.password, hashFind.hash);
       let originalText = bytes.toString();
-      console.log(originalText)
-      console.log(3)
+      // console.log(originalText)
+      // console.log(3)
       bcrypt.compare(originalText, usrDbPass, (err, cb) => {
-        console.log(err, cb)
+        // console.log(err, cb)
         if(err) {
           return res.render('sites/admin/auth/login',
             {
               siteName: engine.siteName,
             });
         }
-        console.log("success")
+        // console.log("success")
         req.session.user = req.body.username
         res.redirect('/admin');
       })
 
-      console.log(4)
+      // console.log(4)
     }
   }catch(e){
     console.log(e)

@@ -11,6 +11,7 @@ class Engine {
   admins = [];
   placedBlocks = [];
   settings = {};
+  snippets = [];
 
   constructor(
     siteName = "NodePress Site",
@@ -28,8 +29,33 @@ class Engine {
       this.hashes.push(obj)
       return obj;
     }
+
+    this.setSiteName = function(siteName) {
+      this.siteName = siteName
+    }
+
   }
 
+  getNodePress(){
+    return {
+      siteName: this.siteName,
+      blocks: this.blocks,
+      placedBlocks: this.placedBlocks,
+      settings: this.settings,
+      setSiteName: this.setSiteName
+    }
+  }
+
+  evalSnippets(){
+    function createFunction(funcString, argument) {
+      // Wrap the function string in a function constructor and return it
+      const func = new Function('nodePress', funcString);
+      return func(argument); // Call the function with the argument
+    }
+    this.snippets.forEach(func =>{
+      createFunction(func, this.getNodePress())
+    })
+  }
   // Load all block files
   async loadBlocks() {
     return new Promise((resolve, reject) => {

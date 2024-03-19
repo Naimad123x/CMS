@@ -116,11 +116,10 @@ module.exports = {
   },
 
   createUser: async function(user) {
-    const { email, username, password, name } = user;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { email, username, password, name, verified } = user;
     return await new Promise(async function (resolve, reject) {
-      pool.query('INSERT INTO `admins` (`email`, `username`, `password`, `name`) VALUES (?, ?, ?, ?)',
-        [email, username, hashedPassword, name],
+      pool.query('INSERT INTO `admins` (`email`, `username`, `password`, `name`, `verified`) VALUES (?, ?, ?, ?, ?)',
+        [email, username, password, name, verified],
         function (err, rows) {
           if (err)
             return reject(err);

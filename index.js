@@ -3,7 +3,7 @@ require('dotenv').config();
 (async () => {
   const transporter = require("./src/utils/transporter");
   require("./src/utils/conn");
-  await delay(5000);
+  await delay(500);
   const Engine = require("./src/web/Engine");
   const engine = new Engine();
 

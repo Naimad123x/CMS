@@ -4,9 +4,36 @@ const {engine} = require("../../../../index")
 const {builder, builderSave} = require("./sub/builder");
 const {settings, settingsSave} = require("./sub/settings");
 const {loginPage, authenticate} = require("./sub/login");
+const {snippets} = require("./sub/snippets");
+const {users} = require("./sub/users");
 
 admin.get(`/`,checkAuth, (req, res) =>{
-  return res.render(`sites/admin/main`, {siteName: engine.siteName})
+  return res.render(`sites/admin/main`,
+    {
+      siteName: engine.siteName,
+      modules: [
+        {
+          name: "Builder",
+          description: "Build website!",
+          link: "/admin/builder"
+        },
+        {
+          name: "Snippets",
+          description: "Create your own code",
+          link: "/admin/snippets"
+        },
+        {
+          name: "Settings",
+          description: "Change site settings!",
+          link: "/admin/settings"
+        },
+        {
+          name: "Users",
+          description: "Manage users",
+          link: "/admin/users"
+        },
+      ]
+    })
 })
 
 admin.get(`/builder`,
@@ -22,6 +49,14 @@ admin.get(`/settings`,
 admin.post(`/settings/save`,
   checkAuth,
   settingsSave)
+
+admin.get(`/snippets`,
+  checkAuth,
+  snippets)
+
+admin.get(`/users`,
+  checkAuth,
+  users)
 
 admin.get('/blocks-data',
   checkAuth,
@@ -43,6 +78,10 @@ admin.get('/block-data/:blockType',
 admin.get('/login',checkLogged, loginPage);
 
 admin.post('/login', checkLogged, authenticate)
+
+admin.get('/logout', checkLogged, (req, res)=>{
+  req.session.user
+})
 
 
 function checkAuth(req,res,next){

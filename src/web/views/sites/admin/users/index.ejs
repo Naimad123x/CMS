@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+    <title><%= siteName %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div class="container text-center">
+    <h1><%= siteName %> - Users</h1>
+    <div class="row justify-content-center">
+        <div class="col-4 mb-5 mt-5 align-self-center">
+            <button id="refreshUsers" type="submit" class="btn btn-secondary">Refresh</button>
+        </div>
+        <div class="col-4 mb-5 mt-5 align-self-center">
+            <button id="addUsers" type="submit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Add user</button>
+        </div>
+    </div>
+    <div id="alertsArea"></div>
+    <div class="row justify-content-center text-start">
+        <div class="col-5 align-self-center">
+            <ul class="list-group">
+                <% users.forEach(user=>{ %>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold"><%= user.username %></div>
+                            <%= user.name %> <%= user.email %>
+                            <span class="position-absolute top-50 start-100 translate-middle p-2 <%= user.verified === 1 ? "bg-success" : "bg-danger"%> border border-light rounded-circle">
+                                <span class="visually-hidden">verified</span>
+                            </span>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New user</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="newUserForm">
+                    <div class="mb-3">
+                        <label for="username" class="col-form-label">username:</label>
+                        <input type="text" class="form-control" id="username" data-field="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="col-form-label">email:</label>
+                        <input type="email" class="form-control" id="email" data-field="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="name" data-field="name" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveUserBtn">Save user</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    const refreshButton = document.querySelector("#refreshUsers")
+    const newUserForm = document.querySelector("#newUserForm")
+    const saveUserBtn = document.querySelector("#saveUserBtn")
+    const alertArea = document.querySelector("#alertsArea")
+
+    function createAlert(success, message){
+      const newAlert = document.createElement("div");
+      newAlert.role = "alert"
+      if(success) {
+        newAlert.classList.add("alert", "alert-success");
+        newAlert.innerHTML = "User created!"
+      }
+      else {
+        newAlert.classList.add("alert", "alert-danger");
+        newAlert.innerHTML = "Error! Message: "+message
+      }
+      return newAlert;
+    }
+
+    saveUserBtn.addEventListener("click", ()=>{
+      const data = {}
+      newUserForm.childNodes.forEach(child =>{
+        if(child.childNodes.length < 1)
+          return;
+        child.childNodes.forEach(child =>{
+          if(child?.dataset?.field) {
+            let id = child.dataset.field
+            data[id] = child.value
+          }
+        })
+      })
+      fetch('http://localhost:3000/api/v1/users/new',{
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then((raw)=>{return raw.json()})
+        .then((data)=>{
+          console.log(data)
+          alertArea.replaceWith(createAlert(data.success, data.message))
+        })
+    })
+
+    refreshButton.addEventListener("click", ()=>{
+      fetch("http://localhost:3000/api/v1/users/refresh",{
+        method: "POST",
+      })
+        .then(raw => {return raw.json()})
+        .then((data)=>{
+          if(data.success)
+            location.reload()
+        })
+    })
+</script>
+</body>
+</html>

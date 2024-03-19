@@ -13,7 +13,7 @@ const messageBuilder = function(from, to, subject, text, html) {
     html: html
   };
 }
-const sendMail = function(email, message){
+const sendMail = function(message){
   transporter.sendMail(message, (err) => {
     if (err) {
       console.log(err)

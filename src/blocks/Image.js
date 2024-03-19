@@ -10,8 +10,18 @@ class Image extends BlockHandler{
                 type: String,
                 default: "https://placehold.co/600x400?text=Placeholder",
             },
+            height: {
+                type: Number,
+                default: 600
+            },
+            width: {
+                type: Number,
+                default: 600
+            },
         }
         this.image = this.options.image.default;
+        this.height = this.options.height.default;
+        this.width = this.options.width.default;
         this.setImage = function(image) {
             if (typeof image !== "string")
                 return false;
@@ -19,7 +29,7 @@ class Image extends BlockHandler{
             return true;
         }
         this.render = function () {
-            return `<div class="text-block"><p><img src="${this.image}"></p></div>`;
+            return `<div class="text-block"><p><img src="${this.image}" alt="${this.id}" height="${this.height}" width="${this.width}"></p></div>`;
         }
         this.renderAdminUI = function() {
             return `
