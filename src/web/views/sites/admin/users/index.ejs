@@ -99,7 +99,7 @@
       fetch('http://localhost:3000/api/v1/users/new',{
         method: 'POST',
         headers: {
-          "Content-Type": 'application/json'
+          "Content-Type": 'application/json',
         },
         body: JSON.stringify(data)
       })
@@ -113,12 +113,11 @@
     refreshButton.addEventListener("click", ()=>{
       fetch("http://localhost:3000/api/v1/users/refresh",{
         method: "POST",
+        headers: {
+          "Content-Type": 'application/json',
+        },
       })
-        .then(raw => {return raw.json()})
-        .then((data)=>{
-          if(data.success)
-            location.reload()
-        })
+        .then(raw => {location.reload()})
     })
 </script>
 </body>

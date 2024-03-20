@@ -28,6 +28,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
 <script>
     let clientId = generateUUID();
+    window.localStorage.setItem("client",clientId)
     const btn = document.getElementById("submitCredentials");
     btn.addEventListener("click", (e)=>{
       e.preventDefault();
@@ -59,7 +60,13 @@
                 },
                 body: JSON.stringify(data)
               }
-            ).then(data => {window.location.reload()})
+            )
+              .then((data) => {return data.json()})
+              .then((json) => {
+                console.log("json", json)
+                window.localStorage.setItem("token", CryptoJS.AES.encrypt(json.token, hashData.hash).toString())
+                window.location.reload()
+              })
 
       })
     })

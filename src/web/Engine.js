@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const {getNewestBuildBlocks} = require("../utils/storage");
 const {engine} = require("../../index");
+const {nanoid} = require("nanoid");
 
 class Engine {
 
@@ -12,6 +13,7 @@ class Engine {
   placedBlocks = [];
   settings = {};
   snippets = [];
+  tokens = []
 
   constructor(
     siteName = "NodePress Site",
@@ -34,6 +36,7 @@ class Engine {
       this.siteName = siteName
     }
 
+    this.evalSnippets()
   }
 
   getNodePress(){
@@ -56,6 +59,27 @@ class Engine {
       createFunction(func, this.getNodePress())
     })
   }
+
+  addToken(user){
+    let exist = this.tokens.find(a=>a.user === user)
+    if(exist)
+      return exist;
+    let data = {
+      user: user,
+      token: nanoid(16),
+    }
+    this.tokens.push(data)
+    return data;
+  }
+
+  getToken(user){
+    return this.tokens.find(a=>a.user === user);
+  }
+
+  removeToken(user){
+
+  }
+
   // Load all block files
   async loadBlocks() {
     return new Promise((resolve, reject) => {

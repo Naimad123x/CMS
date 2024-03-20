@@ -47,8 +47,10 @@ const authenticate = async function(req, res){
             });
         }
         // console.log("success")
-        req.session.user = req.body.username
-        res.redirect('/admin');
+        let token = engine.addToken(req.body.username)
+        req.session.user = token;
+        res.json({token: token.token})
+        // res.redirect('/admin');
       })
 
       // console.log(4)
