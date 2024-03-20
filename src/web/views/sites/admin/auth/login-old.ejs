@@ -27,6 +27,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js" integrity="sha256-/H4YS+7aYb9kJ5OKhFYPUjSJdrtV6AeyJOtTkw6X72o=" crossorigin="anonymous"></script>
 <script>
+    let clientId = generateUUID();
+    window.localStorage.setItem("client",clientId)
     const btn = document.getElementById("submitCredentials");
     btn.addEventListener("click", (e)=>{
       e.preventDefault();
@@ -36,21 +38,54 @@
         password: document.getElementById("password").value,
       }
 
-      fetch(window.location.href,
+      fetch("http://localhost:3000/api/v1/getHashToken",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({client: clientId})
         }
-      )
-        .then((data) => {return data.json()})
-        .then((json) => {
-          console.log("json", json)
-          window.location.reload()
-        })
+      ).then(raw => {return raw.json();})
+        .then((hashData)=>{
+          console.log(hashData)
+            data.password = CryptoJS.AES.encrypt(data.password, hashData.hash).toString()
+            data.client = hashData.client
+          console.log(data)
+            fetch(window.location.href,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data)
+              }
+            )
+              .then((data) => {return data.json()})
+              .then((json) => {
+                console.log("json", json)
+                window.localStorage.setItem("token", CryptoJS.AES.encrypt(json.token, hashData.hash).toString())
+                window.location.reload()
+              })
+
+      })
     })
+
+    function generateUUID() {
+      let d = new Date().getTime();
+      let d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now()*1000)) || 0;
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16;
+        if(d > 0){
+          r = (d + r)%16 | 0;
+          d = Math.floor(d/16);
+        } else {
+          r = (d2 + r)%16 | 0;
+          d2 = Math.floor(d2/16);
+        }
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
 </script>
 </body>
 </html>

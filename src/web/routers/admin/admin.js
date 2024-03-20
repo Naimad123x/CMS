@@ -79,8 +79,9 @@ admin.get('/login',checkLogged, loginPage);
 
 admin.post('/login', checkLogged, authenticate)
 
-admin.get('/logout', checkLogged, (req, res)=>{
-  req.session.user
+admin.get('/logout', checkAuth, (req, res)=>{
+  req.session.destroy();
+  res.redirect('/admin')
 })
 
 

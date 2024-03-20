@@ -21,9 +21,9 @@ const loginPage = async function(req, res) {
 
 const authenticate = async function(req, res){
   try{
-    console.log(0)
+    // console.log(0)
     if(!req.body.username || !req.body.password){
-      console.log(1)
+      // console.log(1)
       return res.render('sites/admin/auth/login',
         {
           siteName: engine.siteName,
@@ -31,16 +31,14 @@ const authenticate = async function(req, res){
 
     } else {
       // console.log(2)
+      req.body.username = req.body.username.toLowerCase();
       const usrDbPass = await getPassword(req.body.username);
       let hashFind = await engine.hashes.find(a => a.client === req.body.client);
-      // console.log(hashFind)
-      let bytes = CryptoJS.AES.decrypt(req.body.password, hashFind.hash);
-      let originalText = bytes.toString();
-      // console.log(originalText)
+      console.log(hashFind)
       // console.log(3)
-      bcrypt.compare(originalText, usrDbPass, (err, cb) => {
-        // console.log(err, cb)
-        if(err) {
+      bcrypt.compare(req.body.password, usrDbPass, (err, cb) => {
+        console.log(err, cb)
+        if(err || !cb) {
           return res.render('sites/admin/auth/login',
             {
               siteName: engine.siteName,
