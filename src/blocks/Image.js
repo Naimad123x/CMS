@@ -39,10 +39,10 @@ class Image extends BlockHandler{
         <input type="text" id="image-input" placeholder="send link"><br/>
         
         <label for="image-width">width:</label>
-        <input type="text" id="image-width" placeholder="600"><br/>
+        <input type="text" id="width-input" placeholder="600"><br/>
         
-        <label for="image-lenght">lenght:</label>
-        <input type="text" id="image-lenght" placeholder="600"><br/>
+        <label for="image-length">lenght:</label>
+        <input type="text" id="length-input" placeholder="600"><br/>
         <br>
       </form>
     ` ;
