@@ -4,7 +4,7 @@ class Header extends BlockHandler{
   constructor() {
     super();
 
-    this.name = "Header TEST"
+    this.name = "Header"
 
     this.description = "Add header"
 
