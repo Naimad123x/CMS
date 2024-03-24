@@ -60,7 +60,7 @@ module.exports = {
       pool.query("SELECT * FROM `blocks` ORDER BY `date` DESC LIMIT 1",
         function(err,rows){
           // console.log(JSON.parse(rows[0].data))
-          resolve(rows[0]?.data ? JSON.parse(rows[0].data) : {})
+          resolve(rows[0]?.data ? JSON.parse(rows[0].data) : [])
         })
     })
   },
