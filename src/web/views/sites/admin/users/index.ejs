@@ -137,6 +137,7 @@
             console.log(data);
             alertArea.replaceWith(createAlert(data.success, data.message))
           })
+        location.reload()
       }else{
         fetch('http://localhost:3000/api/v1/users/password/regen',{
           method: 'POST',
@@ -152,7 +153,6 @@
           })
       }
       refrshAdminUsers()
-      location.reload()
     }
 
     function createAlert(success, message){
