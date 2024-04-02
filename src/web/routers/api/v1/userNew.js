@@ -52,7 +52,7 @@ const newUsers = async function(req, res) {
           )
         )
 
-        return res.json({success: true, message: "done"})
+        return res.json({success: true, message: "User created!"})
       })
     })
   }catch(e){

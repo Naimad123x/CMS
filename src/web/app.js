@@ -10,9 +10,22 @@ const admin = require("./routers/admin/admin")
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
-
 require("../utils/conn");
 const api = require("./routers/api/api");
+const {engine} = require("../../index");
+
+let adminExists = function(req, res, next) {
+  if(req.session.user) {
+    let username = req.session.user.user
+    let exists = engine.admins.find(a => a.username === username)
+    if (exists)
+      return next()
+    req.session.destroy()
+    res.redirect("/admin/login")
+  }else{
+    next()
+  }
+}
 
 app
   .use(morgan("dev"))
@@ -33,7 +46,7 @@ app
   }))
 
   .use("/", router)
-  .use("/admin", admin)
+  .use("/admin", adminExists,  admin)
   .use("/api", api)
 
 
