@@ -1,12 +1,13 @@
 const {engine} = require("../../../../../index");
 
 const users = async function(req, res) {
-  // console.log(engine.admins)
+  console.log(req.session.user)
   return res.render(
     `sites/admin/users/index`,
     {
       siteName: engine.siteName,
-      users: engine.admins
+      users: engine.admins,
+      reqUser: req.session.user
     })
 }
 

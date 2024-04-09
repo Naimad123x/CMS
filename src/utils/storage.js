@@ -25,6 +25,32 @@ module.exports = {
     })
   },
 
+  removeAdmin: async function(username){
+    return await new Promise(async function (resolve, reject) {
+      pool.query("DELETE FROM `admins` WHERE `username` = ?",
+        [username],
+        function (err) {
+          if (err)
+            return reject(err);
+
+          return resolve(true);
+        });
+    })
+  },
+
+  changeAdminPassword: async function(username, password){
+    return await new Promise(async function (resolve, reject) {
+      pool.query("UPDATE `admins` SET `password` = ? WHERE `username` = ?",
+        [password, username],
+        function (err, rows) {
+          if (err)
+            return reject(err);
+
+          return resolve(rows);
+        });
+    })
+  },
+
   getPassword: async function(username){
     return await new Promise(async function (resolve, reject) {
       pool.query("SELECT * FROM `admins` WHERE `username` = ?",

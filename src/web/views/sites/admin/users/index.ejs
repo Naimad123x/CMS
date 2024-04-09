@@ -2,6 +2,21 @@
 <head>
     <title><%= siteName %></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        i {
+            pointer-events: none;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container text-center">
@@ -23,6 +38,14 @@
                         <div class="ms-2 me-auto">
                             <div class="fw-bold"><%= user.username %></div>
                             <%= user.name %> <%= user.email %>
+                            <div class="noselect">
+                                <% if(user.username === reqUser.user) { %>
+                                    <button class="btn btn-secondary btn-sm fs-6 noselect" data-action="change:<%=user.username%>"><i class="bi bi-pencil-square"></i></button>
+                                <% }else{ %>
+                                        <button class="btn btn-secondary btn-sm fs-6 noselect" data-action="regen:<%=user.username%>"><i class="bi bi-arrow-repeat"></i></button>
+                                <% } %>
+                                <button class="btn btn-danger btn-sm fs-6 noselect" data-action="delete:<%=user.username%>"><i class="bi bi-x-lg"></i></button>
+                            </div>
                             <span class="position-absolute top-50 start-100 translate-middle p-2 <%= user.verified === 1 ? "bg-success" : "bg-danger"%> border border-light rounded-circle">
                                 <span class="visually-hidden">verified</span>
                             </span>
@@ -63,19 +86,81 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
+  const refrshAdminUsers = function(){
+    fetch("http://localhost:3000/api/v1/users/refresh",{
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+      },
+    })
+      .then(raw => {location.reload()})
+  }
     const refreshButton = document.querySelector("#refreshUsers")
     const newUserForm = document.querySelector("#newUserForm")
     const saveUserBtn = document.querySelector("#saveUserBtn")
     const alertArea = document.querySelector("#alertsArea")
+    const regenBtns = [...document.querySelectorAll('[data-action]')];
+
+    regenBtns.forEach(btn => btn.addEventListener('click', actionButton))
+
+    function actionButton(btn){
+      let button = btn.target
+      console.log(button)
+      let [action, username] = button.dataset.action.split(":");
+      if(action==="change"){
+        let newPass = prompt("Provide new password")
+        fetch('http://localhost:3000/api/v1/users/password/change',{
+          method: 'POST',
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          body: JSON.stringify({username: username, password: newPass})
+        })
+          .then(raw => raw.json())
+          .then(data => {
+            console.log(data)
+            alertArea.replaceWith(createAlert(data.success, data.message))
+          })
+      }else if (action==="delete"){
+        fetch('http://localhost:3000/api/v1/users/',{
+          method: 'DELETE',
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          body: JSON.stringify({username: username})
+        })
+          .then(raw => raw.json())
+          .then(data => {
+            console.log(data);
+            alertArea.replaceWith(createAlert(data.success, data.message))
+          })
+        location.reload()
+      }else{
+        fetch('http://localhost:3000/api/v1/users/password/regen',{
+          method: 'POST',
+          headers: {
+            "Content-Type": 'application/json',
+          },
+          body: JSON.stringify({username: username})
+        })
+          .then(raw => raw.json())
+          .then(data => {
+            console.log(data);
+            alertArea.replaceWith(createAlert(data.success, data.message))
+          })
+      }
+      refrshAdminUsers()
+    }
 
     function createAlert(success, message){
       const newAlert = document.createElement("div");
       newAlert.role = "alert"
       if(success) {
         newAlert.classList.add("alert", "alert-success");
-        newAlert.innerHTML = "User created!"
+        newAlert.innerHTML = message
       }
       else {
         newAlert.classList.add("alert", "alert-danger");
@@ -110,15 +195,7 @@
         })
     })
 
-    refreshButton.addEventListener("click", ()=>{
-      fetch("http://localhost:3000/api/v1/users/refresh",{
-        method: "POST",
-        headers: {
-          "Content-Type": 'application/json',
-        },
-      })
-        .then(raw => {location.reload()})
-    })
+    refreshButton.addEventListener("click", refrshAdminUsers)
 </script>
 </body>
 </html>

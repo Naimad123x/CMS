@@ -33,5 +33,5 @@ module.exports = {
         callback(null, isPasswordMatch) :
         callback(err);
     })
-    }
+    },
 }
