@@ -15,7 +15,6 @@ class Addon {
       const elementsFiles = fs.readdirSync(path.join(__dirname, `./content/`), {recursive: true}).filter(file => file.includes("htmlElements") && file.endsWith('.html'));
 
       for (const file of elementsFiles) {
-        console.log(file)
         const data = fs.readFileSync(path.join(__dirname, `./content/${file}`), 'utf8');
         this.htmlElements.push(data)
       }

@@ -45,11 +45,11 @@ class Engine {
   }
 
   fetchAddons(){
-    const addonsFiles = fs.readdirSync(path.join(__dirname, `../snippets/content`), {recursive: true})
+    const addonsFiles = fs.readdirSync(path.join(__dirname, `../addons/content`), {recursive: true})
       .filter(file => file.endsWith('.js'));
 
     for (const file of addonsFiles) {
-      const elements = require(path.join(__dirname, `../snippets/content/${file}`));
+      const elements = require(path.join(__dirname, `../addons/content/${file}`));
       let addon = new elements()
       this.addonsCodes = this.addonsCodes.concat(addon.getHtmlElements())
       this.addons.push(addon)
