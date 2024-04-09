@@ -6,6 +6,7 @@ const {settings, settingsSave} = require("./sub/settings");
 const {loginPage, authenticate} = require("./sub/login");
 const {snippets} = require("./sub/snippets");
 const {users} = require("./sub/users");
+const {addons} = require("./sub/addons");
 
 admin.get(`/`,checkAuth, (req, res) =>{
   return res.render(`sites/admin/main`,
@@ -32,6 +33,11 @@ admin.get(`/`,checkAuth, (req, res) =>{
           description: "Manage users",
           link: "/admin/users"
         },
+        {
+          name: "Addons",
+          description: "List of addons",
+          link: "/admin/addons"
+        },
       ]
     })
 })
@@ -57,6 +63,10 @@ admin.get(`/snippets`,
 admin.get(`/users`,
   checkAuth,
   users)
+
+admin.get(`/addons`,
+  checkAuth,
+  addons)
 
 admin.get('/blocks-data',
   checkAuth,

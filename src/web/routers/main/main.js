@@ -7,7 +7,8 @@ const {engine} = require("../../../../index");
 router.get(`/`, (req, res) =>{
   return res.render(`sites/main/index`,{
     siteName: engine.siteName,
-    blocks: engine.placedBlocks
+    blocks: engine.placedBlocks,
+    addons: engine.addonsCodes
   })
 })
 
