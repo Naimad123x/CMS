@@ -8,6 +8,7 @@ const CryptoJS = require("crypto-js");
 const userPasswordRegen = require("./v1/userPasswordRegen");
 const userPasswordChange = require("./v1/usersPasswordChange");
 const {userDelete} = require("./v1/userDelete");
+const {blogNew} = require("./v1/blogApi");
 const api = express.Router();
 
 // main site http://localhost:port/
@@ -26,6 +27,8 @@ api.post('/v1/users/new', checkAuth, newUsers)
 api.post('/v1/users/password/regen', checkAuth, userPasswordRegen)
 
 api.post('/v1/users/password/change', checkAuth, userPasswordChange)
+
+api.post('/v1/blog', checkAuth, blogNew)
 
 api.delete("/v1/users", checkAuth, userDelete)
 

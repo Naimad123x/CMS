@@ -7,6 +7,7 @@ const limiter = require("../utils/limiter");
 const port = process.env.PORT;
 const router = require("./routers/main/main")
 const admin = require("./routers/admin/admin")
+const blog = require("./routers/blog/blog")
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
@@ -46,6 +47,7 @@ app
   }))
 
   .use("/", router)
+  .use("/blog", blog)
   .use("/admin", adminExists,  admin)
   .use("/api", api)
 

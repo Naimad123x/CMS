@@ -58,6 +58,17 @@ function checkDatabase(){
       )
     }
   })
+  pool.query("SELECT * FROM `posts`", (err) =>{
+    if(err){
+      pool.query("create table `posts` (`id` int auto_increment, `author` text not null, `text` text not null, `title` text not null, `image` text not null, `link` text not null, `date` text not null,constraint api_keys_pk primary key (id))",
+        (err)=>{
+          if(err)
+            throw err;
+          console.log(`Database posts created!`)
+        }
+      )
+    }
+  })
   console.log(`Database checked!`)
 }
 

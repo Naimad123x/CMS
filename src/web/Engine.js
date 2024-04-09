@@ -1,7 +1,7 @@
 const storage = require("../utils/storage");
 const fs = require("fs");
 const path = require("path");
-const {getNewestBuildBlocks} = require("../utils/storage");
+const {getNewestBuildBlocks, getPosts} = require("../utils/storage");
 const {engine} = require("../../index");
 const {nanoid} = require("nanoid");
 
@@ -17,6 +17,7 @@ class Engine {
   addons = []
   tokens = []
   addonsCodes = []
+  posts = []
 
   constructor(
     siteName = "NodePress Site",
@@ -39,9 +40,14 @@ class Engine {
       this.siteName = siteName
     }
 
+    this.loadPosts = function(){
+      getPosts().then(r => this.posts = r)
+    }
+
     this.evalSnippets()
 
     this.fetchAddons()
+    this.loadPosts()
   }
 
   fetchAddons(){

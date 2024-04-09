@@ -25,6 +25,43 @@ module.exports = {
     })
   },
 
+  savePost: async function(post) {
+    const { author, text, title, image, link, date } = post;
+    return await new Promise(async function (resolve, reject) {
+      pool.query('INSERT INTO `posts` (`author`, `text`, `title`, `image`, `link`, `date`) VALUES (?, ?, ?, ?, ?, ?)',
+        [author, text, title, image, link, date],
+        function (err, rows) {
+          if (err)
+            return reject(err);
+          return resolve(rows);
+        });
+    })
+  },
+
+  getPosts: async function() {
+    return await new Promise(async function (resolve, reject) {
+      pool.query("SELECT * FROM `posts`",
+        function (err, rows) {
+          if (err)
+            return reject(err);
+          const posts = [];
+          rows.forEach(function (row) {
+            posts.push(
+              {
+                author: row.author,
+                text: row.text,
+                title: row.title,
+                image: row.image,
+                link: row.link,
+                date: row.date,
+              }
+            )
+          })
+          return resolve(posts);
+        });
+    })
+  },
+
   removeAdmin: async function(username){
     return await new Promise(async function (resolve, reject) {
       pool.query("DELETE FROM `admins` WHERE `username` = ?",
