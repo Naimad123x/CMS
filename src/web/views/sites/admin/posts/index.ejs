@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <!-- Replace 'no-api-key' in the link below with your API key -->
     <script src="https://cdn.tiny.cloud/1/vzzkqptg02pahqialykt816tfqe57hjc1jbyoi9ubk3d6cmi/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
@@ -17,8 +17,9 @@
     // ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
   });
 </script>
+<div id="alertsArea"></div>
 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-<form action="http://localhost:3000/api/v1/blog" method="POST" class="m-5" target="dummyframe">
+<form action="http://localhost:3000/api/v1/blog" method="POST" class="m-5" target="dummyframe" onsubmit="handleSubmit(event)">
     <label for="title" class="form-label">Title</label>
     <input type="text" class="form-control mb-3" id="title" name="title">
 
@@ -33,5 +34,32 @@
     <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+<script>
+  const alertArea = document.querySelector("#alertsArea")
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Fetch the response from the server
+    const dummyFrame = document.getElementById("dummyframe");
+    dummyFrame.onload = function() {
+      const response = dummyFrame.contentDocument.body.innerText;
+      if(response === "Bad Request"){
+        return alertArea.replaceWith(createAlert("Wrong request. Fill out the form"))
+      }
+    };
+
+    // Submit the form
+    event.target.submit();
+  }
+
+  function createAlert(mess){
+    const newAlert = document.createElement("div");
+    newAlert.role = "alert"
+      newAlert.classList.add("alert", "alert-warning");
+      newAlert.innerHTML = mess
+    return newAlert;
+  }
+</script>
+
 </body>
 </html>

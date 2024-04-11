@@ -13,7 +13,7 @@ const blogNew = async function(req, res) {
       author: req.session.user.user,
       text: req.body.editor,
       title: req.body.title,
-      image: req.body.image ? "https://placehold.co/600x400?text=Image",
+      image: req.body.image ? req.body.image : "https://placehold.co/600x400?text=Image",
       link: encodeURIComponent(req.body.title.replace(/\s/g, "-")+"-"+randomNum()),
       date: Date.now()
     }

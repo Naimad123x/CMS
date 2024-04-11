@@ -10,6 +10,7 @@
     <div class="row align-items-center justify-content-center">
         <div class="col-3">
             <h1>Login</h1>
+            <div id="alertsArea"></div>
             <form class="needs-validation">
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
@@ -28,6 +29,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
     const btn = document.getElementById("submitCredentials");
+    const alertArea = document.querySelector("#alertsArea")
     btn.addEventListener("click", (e)=>{
       e.preventDefault();
 
@@ -48,9 +50,23 @@
         .then((data) => {return data.json()})
         .then((json) => {
           console.log("json", json)
-          window.location.reload()
+          if(json.success){
+            window.location.reload()
+          }
+          alertArea.replaceWith(createAlert(json))
+          // window.location.reload()
         })
     })
+
+    function createAlert(json){
+      const newAlert = document.createElement("div");
+      newAlert.role = "alert"
+      if(json.error) {
+        newAlert.classList.add("alert", "alert-danger");
+        newAlert.innerHTML = json.error
+      }
+      return newAlert;
+    }
 </script>
 </body>
 </html>

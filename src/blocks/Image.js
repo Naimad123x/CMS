@@ -29,7 +29,7 @@ class Image extends BlockHandler{
             return true;
         }
         this.render = function () {
-            return `<div class="text-block"><p><img src="${this.image}" alt="${this.id}" height="${this.height}" width="${this.width}"></p></div>`;
+            return `<img src="${this.image}" alt="${this.id}" height="${this.height}" width="${this.width}">`;
         }
         this.renderAdminUI = function() {
             return `
