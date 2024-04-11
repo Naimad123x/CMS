@@ -24,10 +24,15 @@ blog.get(`/`, (req, res) =>{
 
 blog.get(`/:post`, (req, res) =>{
 
-  const {post} = req.params
+  const {post: postId} = req.params
+
+  let post = engine.posts.find(a => a.link === postId)
+  if(!post)
+    return res.sendStatus(404)
+
   return res.render(`sites/blog/post`,{
     siteName: engine.siteName,
-    post: engine.posts.find(a => a.link === post),
+    post: post,
     addons: engine.addonsCodes,
   })
 })

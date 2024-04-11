@@ -45,6 +45,8 @@
       const response = dummyFrame.contentDocument.body.innerText;
       if(response === "Bad Request"){
         return alertArea.replaceWith(createAlert("Wrong request. Fill out the form"))
+      }else{
+        window.location.reload();
       }
     };
 

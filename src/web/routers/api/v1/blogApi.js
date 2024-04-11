@@ -5,7 +5,7 @@ const randomNum = customAlphabet('1234567890', 5);
 
 const blogNew = async function(req, res) {
 
-  if(!req.body.title || req.body.editor)
+  if(!req.body.title || !req.body.editor)
     return res.sendStatus(400)
 
   await savePost(
