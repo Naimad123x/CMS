@@ -8,7 +8,8 @@
 <div class="container text-center">
     <h1>settings</h1>
     <p id="result"></p>
-    <form id="settingsForm" onsubmit="return false;">
+    <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+    <form action="http://localhost:3000/admin/settings/save" method="POST" class="m-5" target="dummyframe" onsubmit="handleSubmit(event)">
         <div class="row g-3 align-items-center">
             <div class="col-auto text-start">
                 <label for="siteName" class="form-label">Site name</label>
@@ -16,9 +17,9 @@
                 <div id="siteNameHelp" class="form-text">Displayed site name</div>
             </div>
             <div class="col-auto text-start">
-                <label for="something" class="form-label">Something else</label>
-                <input type="number" class="form-control" name="something" id="something" max="999999"/>
-                <div id="siteNameHelp" class="form-text">Something</div>
+                <label for="siteDescription" class="form-label">Site description</label>
+                <input type="text" class="form-control" name="siteDescription" id="siteDescription" />
+                <div id="siteDescriptionHelp" class="form-text">Displayed site description</div>
             </div>
             <div class="col align-self-end text-end">
                 <button id="settingsSubmit" type="submit" class="btn btn-primary" >Update</button>
@@ -27,6 +28,29 @@
     </form>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script src="/settings/script.js"></script>
+<!--<script src="/settings/script.js"></script>-->
+<script>
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent the form from submitting normally
+
+    // Fetch the response from the server
+    const dummyFrame = document.getElementById("dummyframe");
+    dummyFrame.onload = function() {
+      const response = dummyFrame.contentDocument.body.innerText;
+        return replaceContent(true, "Settings saved");
+    };
+
+    // Submit the form
+    event.target.submit();
+  }
+
+  function replaceContent(success, text){
+    const result = document.querySelector('#result');
+
+    if(success)
+      return result.innerHTML = "<div class=\"alert alert-success\" role=\"alert\">" + text + "</div>";
+    return result.innerHTML = "<div class=\"alert alert-danger\" role=\"alert\">" + text + "</div>";
+  }
+</script>
 </body>
 </html>
