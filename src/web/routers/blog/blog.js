@@ -26,7 +26,7 @@ blog.get(`/:post`, async (req, res) => {
 
   const {post: postId} = req.params
 
-  let post = await engine.posts.find(a => a.link === postId)
+  let post = await engine.posts.find(a => decodeURIComponent(a.link) === postId)
   if (!post)
     return res.sendStatus(404)
 
