@@ -6,13 +6,51 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
+    <style>
+        body {
+            background: linear-gradient(to right, #6a11cb 10%, #2575fc 60%); /* Przykład gradientowego tła */
+        }
+    
+        .header-row {
+            display: flex;
+            justify-content: space-between; /* Rozdziela elementy na przeciwnych końcach */
+            align-items: center;
+        }
+    
+        .header-title {
+            flex-grow: 1; /* Pozwala tytułowi rosnąć i zajmować dostępną przestrzeń */
+            text-align: center;
+        }
+    
+        h1 {
+            font-size: 3.5em; /* Zwiększenie rozmiaru czcionki */
+        }
+    
+        img {
+            margin-right: 10px; /* Dodaje margines po prawej stronie obrazka */
+        }
+
+        .header-row .text-end > div {
+            color: #000000;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 16px; /* Ustawienie rozmiaru czcionki na 16px */
+        }
+    </style>
+
     <div class="container text-center">
-        <div class="row mt-5 mb-5">
-            <div class="col-sm-9 text-start">
-                <h1>Admin panel</h1>
+        <div class="row mt-5 mb-5 header-row">
+            <div class="col-auto">
+                <img src="https://i.imgur.com/LEnaOX3.png" alt="Logo" style="height: 125px;"> <!-- Zmień URL i alt według potrzeb -->
             </div>
-            <div class="col-sm-3 text-end">
-                <a class="btn btn-primary fs-4" href="/admin/logout" role="button"><i class="bi bi-box-arrow-right"></i></a>
+            <div class="col">
+                <h1 class="header-title">Admin panel</h1>
+            </div>
+            <div class="col-auto text-end">
+                <div>Logout</div>
+                <a class="btn btn-primary fs-4" href="/admin/logout" role="button">
+                    <i class="bi bi-box-arrow-right"></i>
+                </a>
             </div>
         </div>
         <div class="row">
