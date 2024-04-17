@@ -1,5 +1,6 @@
 const pool = require("./conn.js");
 const bcrypt = require('bcrypt');
+const {format} = require("date-fns")
 
 module.exports = {
 
@@ -54,6 +55,7 @@ module.exports = {
                 image: row.image,
                 link: row.link,
                 date: row.date,
+                formattedDate: format(new Date(row.date*1), "dd-MM-yyyy")
               }
             )
           })
