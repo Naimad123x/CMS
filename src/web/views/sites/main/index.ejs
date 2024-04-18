@@ -28,6 +28,9 @@
         <h1><%= siteName %> - Home</h1>
         <div class="col-auto"> <!-- Puste miejsce, aby h1 pozostał wyśrodkowany -->
         </div>
+        <div class="text-center mt-4">
+            <a href="/admin" class="btn btn-primary">Back</a>
+        </div>
     </div>
     <div id="main-content">
         <div id="nodepress-content">
@@ -35,9 +38,6 @@
                 <%- block.render(); %>
             <% } %>
         </div>
-    </div>
-    <div class="text-center mt-4">
-        <a href="/admin" class="btn btn-secondary">Back to Admin</a>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

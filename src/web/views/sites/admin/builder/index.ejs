@@ -5,8 +5,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
       #left-sidebar {
-          background-color: #D0D9FF; /* Gradient od jasnoniebieskiego do nieco ciemniejszego niebieskiego */
+          background-color: #D0D9FF;
+          text-align: center;
       }
+      #left-sidebar li, #left-sidebar img, #left-sidebar button {
+      border: 1px solid black; /* Adds a black border to headers, list items, images, and buttons within the left sidebar */
+      margin: 10px 0; /* Adds vertical spacing between elements */
+      padding: 5px; /* Adds padding inside each element */
+      text-align: center;
+      }
+      #left-sidebar li {
+      background-color: #f0f0f0; /* Adds a background color to list items (text) */
+      list-style: none; /* Removes bullet points from list items */
+  }
 
       #right-sidebar {
       background-color: #D0D9FF; /* Gradient od jasnopomarańczowego do ciemniejszego pomarańczowego */
@@ -14,10 +25,18 @@
 
       #main-content {
       background-color: #D0D9FF; /* Gradient od jasnozielonego do ciemniejszego zielonego */
+      text-align: center;
       }
-      .btn-back {
-      border: 1px solid black; /* Dodaje czarną ramkę do przycisku */
-      }
+      .btn-back, #saveBlocks, .btn {
+      border: 2px solid black; /* Adds a black border to buttons */
+  }
+
+  img {
+      display: block; /* Ensures images are block level to handle margins correctly */
+      max-width: 100%; /* Ensures images do not overflow the sidebar */
+      height: auto; /* Keeps image aspect ratio */
+  }
+      
     </style>
 </head>
 <body>
@@ -39,13 +58,14 @@
 
 <div id="right-sidebar">
     <h2>Settings</h2>
+    <div class="text-start">
+      <a href="/admin" class="btn btn-light btn-back">Back</a>
+    </div>
     <div id="settings-panel">
         <button id="saveBlocks">SAVE CHANGES</button>
         <!-- Block settings will be loaded here -->
     </div>
-    <div class="text-start">
-      <a href="/admin" class="btn btn-light btn-back">Back</a>
-    </div>
+    
 </div>
 <script src="/builder/script.js"></script>
 <script>
