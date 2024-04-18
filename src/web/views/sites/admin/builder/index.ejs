@@ -51,7 +51,7 @@
         newBlocks.push(settingsValues)
       }
       newBlocks.shift();
-      return sendSettingsValues(newBlocks.filter(a => a !== null && a.options !== null));
+      return sendSettingsValues(newBlocks.filter(a => a !== null && a.options !== null && a.type !== null));
     })
 
     function sendSettingsValues(newBlocks){
