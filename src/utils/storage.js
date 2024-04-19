@@ -41,7 +41,7 @@ module.exports = {
 
   getPosts: async function() {
     return await new Promise(async function (resolve, reject) {
-      pool.query("SELECT * FROM `posts`",
+      pool.query("SELECT * FROM `posts` ORDER BY `date` DESC",
         function (err, rows) {
           if (err)
             return reject(err);
