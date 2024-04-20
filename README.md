@@ -8,6 +8,7 @@
 - Database integration
 - E-Mail integration
 - Admin panel
+- Blog
 
 ## ⚙ Installation and Run
 1. copy repository
