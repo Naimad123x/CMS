@@ -9,6 +9,9 @@
 <div id="main-content">
     <h1><%= siteName %> - Home</h1>
     <div id="nodepress-content">
+        <% if(!blocks || blocks.length < 1){%>
+            <p>Welcome on your new page with NodePress.</p><p>Create new look of your site <a href="/admin/builder">here</a>.</p>
+        <% } %>
         <% for(let block of blocks){ %>
             <%- block.render(); %>
         <% } %>
