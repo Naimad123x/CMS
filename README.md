@@ -12,5 +12,5 @@
 
 ## ⚙ Installation and Run
 1. copy repository
-2. create and complete .env file base on `example.env` file
-3. Run `install&start` script by `node run install&start`
+2. create and complete `.env` file base on `example.env` file
+3. Run `install&start` script by `npm run install&start`
