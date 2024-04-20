@@ -11,7 +11,7 @@ const userPasswordRegen = async function(req, res) {
   if(req.session.user.user !== "admin" && data.username === "admin")
     return res.json({success: false, message: "You can't modify admin user"})
 
-  const password = nanoid(48);
+  const password = nanoid(16);
 
   const adminUser = engine.admins.find(a => a.username === data.username);
 

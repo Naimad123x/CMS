@@ -24,7 +24,7 @@ const newUsers = async function(req, res) {
       return res.json({success: false, message: "this email is already taken!"})
 
 
-    const password = nanoid(48);
+    const password = nanoid(16);
 
     await encryptPassword(password, async (err, cb) => {
       if (err) {

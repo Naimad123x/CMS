@@ -34,7 +34,7 @@ const authenticate = async function(req, res){
       let hashFind = await engine.hashes.find(a => a.client === req.body.client);
       console.log(hashFind)
       // console.log(3)
-      bcrypt.compare(req.body.password, usrDbPass, (err, cb) => {
+      bcrypt.compare(req.body.password.replace(/\s/, ""), usrDbPass, (err, cb) => {
         console.log(err, cb)
         if(err || !cb) {
           return res.send({ error: 'Wrong credentials'});
